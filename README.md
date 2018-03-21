@@ -2,7 +2,7 @@
 Convert an XML file to a CSV using a predefined structure. It can be used to convert a complexly structured XML file to a CSV file that has unique cases on each row. Which tag and attribute values are included in the CSV file are defined beforehand by the user.
 
 ## 0. Usage
-1. Start the program
+1. Start the `xml_csv.py`
 2. Choose the data source file
 3. Choose the structure file
 4. Choose the output file
