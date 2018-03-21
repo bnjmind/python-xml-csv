@@ -3,16 +3,15 @@ import time
 import gzip
 import csv
 import xml.etree.ElementTree as ET
-from pick import pick
 import glob
 import os
 
 # clear console
 os.system('cls' if os.name=='nt' else 'clear')
 
-# show a file prompt
-files = glob.glob('../1_data/*.gz')
-chosen_file, file_index = pick(files, 'Choose a gzipped data file:')
+# get input values in terminal
+input_datafile = input('Choose data source file: ')
+input_outputfile = input('Choose output file: (' + input_datafile + '.csv)') or input_datafile + '.csv'
 
 # start timer
 timer = time.time()
@@ -257,7 +256,7 @@ structure = {
 }
 
 # open file
-datafile = gzip.open(chosen_file)
+datafile = gzip.open(input_datafile)
 
 # read content
 data = datafile.read()
@@ -444,7 +443,7 @@ def getColumnNames(_structure, _cols):
 fieldnames = getColumnNames(structure, [])
 
 # create a csv file
-csv_file = open('../3_results/' + os.path.basename(datafile.name)[:-3] + '.csv', 'w', newline='')
+csv_file = open(input_outputfile, 'w', newline='')
 csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames, extrasaction='ignore', delimiter=',')
 csv_writer.writeheader()
 
