@@ -4,22 +4,22 @@ import gzip
 import csv
 import xml.etree.ElementTree as ET
 import glob
-import os
 import json
+import argparse
 
-# clear console
-os.system('cls' if os.name=='nt' else 'clear')
+# parse options given to script
+parser = argparse.ArgumentParser()
+parser.add_argument("data", help="The data source file to be converted (.xml or .gz)")
+parser.add_argument("structure", help="The structure file to be used (.json)")
+parser.add_argument("--namespaces", help="The namespaces to be used (.json)", metavar="")
+parser.add_argument("--output", help="The output file to be generated, defaults to source file name and location", metavar="")
+options = parser.parse_args()
 
 # get input values in terminal
-input_datafile = input('Choose data source file: ')
-input_structure = input('Choose structure JSON file: ')
-input_namespaces = input('Choose namespaces JSON file: ')
-input_outputfile = input('Choose output file: (' + input_datafile + '.csv)') or input_datafile + '.csv'
-
-# input_datafile = "./examples/data/0550_Trafficspeed.gz"
-# input_structure = "./examples/structures/trafficspeed.json"
-# input_namespaces = "./examples/namespaces/namespaces.json"
-# input_outputfile = "./examples/data/0550_Trafficspeed.gz.csv"
+input_datafile = options.data
+input_structure = options.structure
+input_namespaces = options.namespaces or "examples/namespaces/namespaces.json"
+input_outputfile = options.output or options.data + ".csv"
 
 # start timer
 timer = time.time()
