@@ -51,18 +51,34 @@ tree = ET.fromstring(data)
 # initialize the row counter
 rows = 0
 
+# define function that constructs the name for an attribute
+def getAttributeName(_attr_name, _attr_attribute, _el_name, _el_tag, _el_extends):
+
+    # if there is a specified name for the attribute
+    if _attr_name is not None:
+        return _attr_name
+    # else if the element extends another element
+    elif _el_extends is not None:
+        return _attr_attribute
+    # else if there is a specified name for the element
+    elif _el_name is not None:
+        return _el_name + "_" + _attr_attribute
+    # else if there is no specified names for neither
+    else:
+        return _el_tag + "_" + _attr_attribute
+
 # define function that constructs a tag name of an element
-def getElementTag(_tag, _namespace):
+def getNamespace(_key, _namespace):
 
     # if there is no namespace defined
     if _namespace is None:
-        return _tag
+        return _key
     # else if there is no list of namespaces provided
     elif namespaces is None:
-        return "{" + _namespace + "}" + _tag
+        return "{" + _namespace + "}" + _key
     # else if there is both a namespace and a list provided
     else:
-        return "{" + namespaces[_namespace] + "}" + _tag
+        return "{" + namespaces[_namespace] + "}" + _key
 
 
 # define the element reader
@@ -94,7 +110,7 @@ def readElement(_structure, _tree, _vars):
         for extend in _element['extends']:
 
             # put the found extended element in the list
-            els.append(_tree.find(getElementTag(extend, _element['namespace'])))
+            els.append(_tree.find(getNamespace(extend, _element['namespace'])))
 
         # print(els)
 
@@ -102,13 +118,13 @@ def readElement(_structure, _tree, _vars):
     elif _element['multiple'] is True:
 
         # find all elements (which returns a list)
-        els = _tree.findall(getElementTag(_element['tag'], _element['namespace']))
+        els = _tree.findall(getNamespace(_element['tag'], _element['namespace']))
 
     # if not multiple
     else:
 
         # put first found element in a list
-        els = [_tree.find(getElementTag(_element['tag'], _element['namespace']))]
+        els = [_tree.find(getNamespace(_element['tag'], _element['namespace']))]
 
     # get the tree element() with correct namespace if provided
     for index, el in enumerate(els):
@@ -133,19 +149,43 @@ def readElement(_structure, _tree, _vars):
                 # update the attribute
                 _attribute.update(attribute)
 
+                # get the column name
+                colname = getAttributeName(_attribute['name'], _attribute['attribute'], _element['name'], _element['tag'], _element['extends'])
+
+                # get the attribute value
+                value = el.get(getNamespace(_attribute['attribute'], _attribute['namespace']))
+
                 # add attribute value to the vars
-                _vars.update({ ((((_element['tag'] if _element['name'] is None else _element['name']) + '_' if _element['extends'] is None else '') + _attribute['attribute']) if _attribute['name'] is None else _attribute['name']): el.get(_attribute['attribute'] if _attribute['namespace'] is None else "{" + namespaces[_attribute['namespace']] + "}" + _attribute['attribute']) })
+                _vars.update({ colname: value })
 
         # check if the text content should be saved
         if _element['text'] is True:
 
+            # get the column name
+            colname = _element['tag'] if _element['name'] is None else _element['name']
+
+            # get the text value
+            value = el.text
+
             # add text content to the vars
-            _vars.update({ (_element['tag'] if _element['name'] is None else _element['name']): el.text })
+            _vars.update({ colname: value })
 
         # check if element should be a row in the result
-        if _element['row'] is True:
+        if _element['row'] is False:
 
-            # from this point, every new value is unique for the row, so we create a copy of the current vars
+            # check if there are children to the element
+            if _element['children'] is not None:
+
+                # loop through them
+                for child in _element['children']:
+
+                    # read each element
+                    readElement(child, el, _vars)
+
+        # element is indeed a row
+        else:
+
+            # from this point, every new value is unique for the row, so we create a copy of the vars up to this point
             row_vars = _vars.copy()
 
             # check if there are children to the element
@@ -166,20 +206,6 @@ def readElement(_structure, _tree, _vars):
             rows += 1
             if rows % 150 == 0:
                 print("\rRows written: " + str(rows), end="")
-
-
-
-        # element is not a row
-        else:
-
-            # check if there are children to the element
-            if _element['children'] is not None:
-
-                # loop through them
-                for child in _element['children']:
-
-                    # read each element
-                    readElement(child, el, _vars)
 
 
 # define the column name reader
@@ -217,7 +243,8 @@ def getColumnNames(_structure, _cols):
             # update the attribute
             _attribute.update(attribute)
 
-            colname = (((_element['tag'] if _element['name'] is None else _element['name']) + "_" if _element['extends'] is None else '') + _attribute['attribute']) if _attribute['name'] is None else _attribute['name']
+            # get the column name
+            colname = getAttributeName(_attribute['name'], _attribute['attribute'], _element['name'], _element['tag'], _element['extends'])
 
             # add attribute to columns if it doesn't exist yet
             if colname not in _cols:
@@ -226,6 +253,7 @@ def getColumnNames(_structure, _cols):
     # check if the text content should be saved
     if _element['text'] is True:
 
+        # get the column name
         colname = _element['tag'] if _element['name'] is None else _element['name']
 
         # add tag to columns
