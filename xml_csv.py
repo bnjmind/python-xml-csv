@@ -19,7 +19,7 @@ options = parser.parse_args()
 # save options to variables
 input_datafile = options.data
 input_structure = options.structure
-input_namespaces = options.namespaces or "examples/namespaces/namespaces.json"
+input_namespaces = options.namespaces
 input_outputfile = options.output or options.data + ".csv"
 
 # start timer
@@ -29,8 +29,11 @@ timer = time.time()
 print("\nPreparing everything... (The script can be aborted by pressing ctrl+c)")
 
 # open and parse namespaces json
-namespacesfile = open(input_namespaces, "r") if input_namespaces is not None and input_namespaces[-4:] == "json" else sys.exit("Error: Provided namespaces file is not a .json file.")
-namespaces = json.load(namespacesfile)
+if input_namespaces is not None:
+    namespacesfile = open(input_namespaces, "r") if input_namespaces[-4:] == "json" else sys.exit("Error: Provided namespaces file is not a .json file.")
+    namespaces = json.load(namespacesfile)
+else:
+    namespaces = None
 
 # open and parse structure json
 structurefile = open(input_structure, "r") if input_structure is not None and input_structure[-4:] == "json" else sys.exit("Error: Provided structure file is not a .json file.")
