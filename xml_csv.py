@@ -7,6 +7,7 @@ import glob
 import json
 import argparse
 import sys
+import os
 
 # parse options given to script
 parser = argparse.ArgumentParser()
@@ -278,6 +279,10 @@ def getColumnNames(_structure, _cols):
 
 # get all the field names
 fieldnames = getColumnNames(structure, [])
+
+# if output folder doesn't exist yet, create it
+if not os.path.exists(os.path.dirname(input_outputfile)):
+    os.makedirs(os.path.dirname(input_outputfile))
 
 # create a csv file
 csv_file = open(input_outputfile, 'w')
