@@ -15,11 +15,11 @@
                             "namespace": "datex2",
                             "attributes": [
                                 {
-                                    "key": "id",
+                                    "attribute": "id",
                                     "name": "locTableID"
                                 },
                                 {
-                                    "key": "version",
+                                    "attribute": "version",
                                     "name": "locTableVersion"
                                 }
                             ]
@@ -34,11 +34,11 @@
                                     "namespace": "datex2",
                                     "attributes": [
                                         {
-                                            "key": "id",
+                                            "attribute": "id",
                                             "name": "locID"
                                         },
                                         {
-                                            "key": "version",
+                                            "attribute": "version",
                                             "name": "locVersion"
                                         }
                                     ]
@@ -54,7 +54,7 @@
                                     "namespace": "datex2",
                                     "attributes": [
                                         {
-                                            "key": "index",
+                                            "attribute": "index",
                                             "name": "locIndex"
                                         }
                                     ],
@@ -88,7 +88,7 @@
                                                     "namespace": "datex2",
                                                     "attributes": [
                                                         {
-                                                            "key": "type",
+                                                            "attribute": "type",
                                                             "name": "mTypeX",
                                                             "namespace": "xsi"
                                                         }
@@ -164,23 +164,23 @@
                                                             "namespace": "datex2",
                                                             "attributes": [
                                                                 {
-                                                                    "key": "computationalMethod",
+                                                                    "attribute": "computationalMethod",
                                                                     "name": "mCompMethodX"
                                                                 },
                                                                 {
-                                                                    "key": "numberOfIncompleteInputs",
+                                                                    "attribute": "numberOfIncompleteInputs",
                                                                     "name": "mNumInputsIncomp"
                                                                 },
                                                                 {
-                                                                    "key": "numberOfInputValuesUsed",
+                                                                    "attribute": "numberOfInputValuesUsed",
                                                                     "name": "mNumInputsUsed"
                                                                 },
                                                                 {
-                                                                    "key": "standardDeviation",
+                                                                    "attribute": "standardDeviation",
                                                                     "name": "mStDev"
                                                                 },
                                                                 {
-                                                                    "key": "supplierCalculatedDataQuality",
+                                                                    "attribute": "supplierCalculatedDataQuality",
                                                                     "name": "mAccuracyX"
                                                                 }
                                                             ],

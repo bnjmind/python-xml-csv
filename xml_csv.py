@@ -110,7 +110,7 @@ def readElement(_structure, _tree, _vars):
 
                 # set default properties of attribute
                 _attribute = {
-                    "key": None,
+                    "attribute": None,
                     "name": None,
                     "namespace": None
                 }
@@ -119,7 +119,7 @@ def readElement(_structure, _tree, _vars):
                 _attribute.update(attribute)
 
                 # add attribute value to the vars
-                _vars.update({ ((((_element['tag'] if _element['name'] is None else _element['name']) + '_' if _element['extends'] is None else '') + _attribute['key']) if _attribute['name'] is None else _attribute['name']): el.get(_attribute['key'] if _attribute['namespace'] is None else "{" + namespaces[_attribute['namespace']] + "}" + _attribute['key']) })
+                _vars.update({ ((((_element['tag'] if _element['name'] is None else _element['name']) + '_' if _element['extends'] is None else '') + _attribute['attribute']) if _attribute['name'] is None else _attribute['name']): el.get(_attribute['attribute'] if _attribute['namespace'] is None else "{" + namespaces[_attribute['namespace']] + "}" + _attribute['attribute']) })
 
         # check if the text content should be saved
         if _element['text'] is True:
@@ -194,7 +194,7 @@ def getColumnNames(_structure, _cols):
 
             # set default properties of attribute
             _attribute = {
-                "key": None,
+                "attribute": None,
                 "name": None,
                 "namespace": None
             }
@@ -202,7 +202,7 @@ def getColumnNames(_structure, _cols):
             # update the attribute
             _attribute.update(attribute)
 
-            colname = (((_element['tag'] if _element['name'] is None else _element['name']) + "_" if _element['extends'] is None else '') + _attribute['key']) if _attribute['name'] is None else _attribute['name']
+            colname = (((_element['tag'] if _element['name'] is None else _element['name']) + "_" if _element['extends'] is None else '') + _attribute['attribute']) if _attribute['name'] is None else _attribute['name']
 
             # add attribute to columns if it doesn't exist yet
             if colname not in _cols:

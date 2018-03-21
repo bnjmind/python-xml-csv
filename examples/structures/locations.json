@@ -15,11 +15,11 @@
                             "namespace": "datex2",
                             "attributes": [
                                 {
-                                    "key": "id",
+                                    "attribute": "id",
                                     "name": "locTableID"
                                 },
                                 {
-                                    "key": "version",
+                                    "attribute": "version",
                                     "name": "locTableVersion"
                                 }
                             ],
@@ -29,11 +29,11 @@
                                     "namespace": "datex2",
                                     "attributes": [
                                         {
-                                            "key": "id",
+                                            "attribute": "id",
                                             "name": "locID"
                                         },
                                         {
-                                            "key": "version",
+                                            "attribute": "version",
                                             "name": "locVersion"
                                         }
                                     ],
@@ -98,7 +98,7 @@
                                             "namespace": "datex2",
                                             "attributes": [
                                                 {
-                                                    "key": "type",
+                                                    "attribute": "type",
                                                     "name": "locType",
                                                     "namespace": "xsi"
                                                 }
@@ -159,7 +159,7 @@
                                             "namespace": "datex2",
                                             "attributes": [
                                                 {
-                                                    "key": "index",
+                                                    "attribute": "index",
                                                     "name": "locIndex"
                                                 }
                                             ],
