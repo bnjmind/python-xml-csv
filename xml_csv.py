@@ -5,255 +5,34 @@ import csv
 import xml.etree.ElementTree as ET
 import glob
 import os
+import json
 
 # clear console
 os.system('cls' if os.name=='nt' else 'clear')
 
 # get input values in terminal
 input_datafile = input('Choose data source file: ')
+input_structure = input('Choose structure JSON file: ')
+input_namespaces = input('Choose namespaces JSON file: ')
 input_outputfile = input('Choose output file: (' + input_datafile + '.csv)') or input_datafile + '.csv'
+
+# input_datafile = "./examples/data/0550_Trafficspeed.gz"
+# input_structure = "./examples/structures/trafficspeed.json"
+# input_namespaces = "./examples/namespaces/namespaces.json"
+# input_outputfile = "./examples/data/0550_Trafficspeed.gz.csv"
 
 # start timer
 timer = time.time()
 
 print("Working...")
 
-# define some name spaces
-namespaces = {
-    "soapenv": "http://schemas.xmlsoap.org/soap/envelope/",
-    "datex2": "http://datex2.eu/schema/2/2_0",
-    "xsi": "http://www.w3.org/2001/XMLSchema-instance"
-}
+# open and parse namespaces json
+namespacesfile = open(input_namespaces, "r")
+namespaces = json.load(namespacesfile)
 
-# define the structure in which the data is represented (see ../0_info/structure.xlsx for info)
-structure = {
-    "tag": "Body",
-    "namespace": "soapenv",
-    "children": [
-        {
-            "tag": "d2LogicalModel",
-            # "namespace": "datex2",
-            "children": [
-                {
-                    "tag": "payloadPublication",
-                    "namespace": "datex2",
-                    "children": [
-                        {
-                            "tag": "measurementSiteTableReference",
-                            "name": "locTableRef",
-                            "namespace": "datex2",
-                            "attributes": [
-                                {
-                                    "key": "id",
-                                    "name": "locTableID"
-                                },
-                                {
-                                    "key": "version",
-                                    "name": "locTableVersion"
-                                }
-                            ]
-                        },
-                        {
-                            "tag": "siteMeasurements",
-                            "namespace": "datex2",
-                            "multiple": True,
-                            "children": [
-                                {
-                                    "tag": "measurementSiteReference",
-                                    "namespace": "datex2",
-                                    "attributes": [
-                                        {
-                                            "key": "id",
-                                            "name": "locID"
-                                        },
-                                        {
-                                            "key": "version",
-                                            "name": "locVersion"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "tag": "measurementTimeDefault",
-                                    "name": "mTime",
-                                    "namespace": "datex2",
-                                    "text": True
-                                },
-                                {
-                                    "tag": "measuredValue",
-                                    "namespace": "datex2",
-                                    "attributes": [
-                                        {
-                                            "key": "index",
-                                            "name": "locIndex"
-                                        }
-                                    ],
-                                    "row": True,
-                                    "multiple": True,
-                                    "children": [
-                                        {
-                                            "tag": "measurementEquipmentTypeUsed",
-                                            "namespace": "datex2",
-                                            "children": [
-                                                {
-                                                    "tag": "values",
-                                                    "namespace": "datex2",
-                                                    "children": [
-                                                        {
-                                                            "tag": "value",
-                                                            "name": "mEquipmentX",
-                                                            "namespace": "datex2",
-                                                            "text": True
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "tag": "measuredValue",
-                                            "namespace": "datex2",
-                                            "children": [
-                                                {
-                                                    "tag": "basicData",
-                                                    "namespace": "datex2",
-                                                    "attributes": [
-                                                        {
-                                                            "key": "type",
-                                                            "name": "mTypeX",
-                                                            "namespace": "xsi"
-                                                        }
-                                                    ],
-                                                    "children": [
-                                                        {
-                                                            "tag": "measurementOrCalculationTime",
-                                                            "name": "mTimeX",
-                                                            "namespace": "datex2",
-                                                            "text": True
-                                                        },
-                                                        {
-                                                            "tag": "vehicleFlow",
-                                                            "namespace": "datex2",
-                                                            "children": [
-                                                                {
-                                                                    "tag": "vehicleFlowRate",
-                                                                    "name": "mVehicleFlowRate",
-                                                                    "namespace": "datex2",
-                                                                    "text": True
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "tag": "averageVehicleSpeed",
-                                                            "namespace": "datex2",
-                                                            "children": [
-                                                                {
-                                                                    "tag": "speed",
-                                                                    "name": "mSpeed",
-                                                                    "namespace": "datex2",
-                                                                    "text": True
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "tag": "travelTimeType",
-                                                            "name": "mTravelTimeType",
-                                                            "namespace": "datex2",
-                                                            "text": True
-                                                        },
-                                                        {
-                                                            "tag": "travelTime",
-                                                            "namespace": "datex2",
-                                                            "children": [
-                                                                {
-                                                                    "tag": "duration",
-                                                                    "name": "mDuration",
-                                                                    "namespace": "datex2",
-                                                                    "text": True
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "tag": "trafficStatus",
-                                                            "namespace": "datex2",
-                                                            "children": [
-                                                                {
-                                                                    "tag": "trafficStatusValue",
-                                                                    "name": "mTrafficStatus",
-                                                                    "namespace": "datex2",
-                                                                    "text": True
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "extends": [
-                                                                "vehicleFlow",
-                                                                "averageVehicleSpeed",
-                                                                "travelTime",
-                                                                "trafficStatus"
-                                                            ],
-                                                            "namespace": "datex2",
-                                                            "attributes": [
-                                                                {
-                                                                    "key": "computationalMethod",
-                                                                    "name": "mCompMethodX"
-                                                                },
-                                                                {
-                                                                    "key": "numberOfIncompleteInputs",
-                                                                    "name": "mNumInputsIncomp"
-                                                                },
-                                                                {
-                                                                    "key": "numberOfInputValuesUsed",
-                                                                    "name": "mNumInputsUsed"
-                                                                },
-                                                                {
-                                                                    "key": "standardDeviation",
-                                                                    "name": "mStDev"
-                                                                },
-                                                                {
-                                                                    "key": "supplierCalculatedDataQuality",
-                                                                    "name": "mAccuracyX"
-                                                                }
-                                                            ],
-                                                            "children": [
-                                                                {
-                                                                    "tag": "dataError",
-                                                                    "name": "mError",
-                                                                    "namespace": "datex2",
-                                                                    "text": True
-                                                                },
-                                                                {
-                                                                    "tag": "reasonForDataError",
-                                                                    "namespace": "datex2",
-                                                                    "children": [
-                                                                        {
-                                                                            "tag": "values",
-                                                                            "namespace": "datex2",
-                                                                            "children": [
-                                                                                {
-                                                                                    "tag": "value",
-                                                                                    "name": "mErrorReason",
-                                                                                    "namespace": "datex2",
-                                                                                    "text": True
-                                                                                }
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-}
+# open and parse structure json
+structurefile = open(input_structure, "r")
+structure = json.load(structurefile)
 
 # open file
 datafile = gzip.open(input_datafile)
