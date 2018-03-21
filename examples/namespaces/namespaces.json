@@ -1,0 +1,5 @@
+{
+    "soapenv": "http://schemas.xmlsoap.org/soap/envelope/",
+    "datex2": "http://datex2.eu/schema/2/2_0",
+    "xsi": "http://www.w3.org/2001/XMLSchema-instance"
+}
