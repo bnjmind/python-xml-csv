@@ -2,10 +2,10 @@
 Convert an XML file to a CSV using a predefined structure. It can be used to convert a complexly structured XML file to a CSV file that has unique cases on each row. Which tag and attribute values are included in the CSV file are defined beforehand by the user.
 
 ## 0. Usage
-1. Start the `xml_csv.py`
-2. Choose the data source file
-3. Choose the structure file
-4. Choose the output file
+```
+python3 xml_csv.py data structure [--namespaces] [--output]
+```
+Where 'data' is a relative path to an .xml or .gz file, 'structure' and '--namespaces' are relative paths to .json files, and '--output' is a relative path to a .csv file.
 
 ## 1. Structure file
 A structure file defines how the XML file should be read and converted to a CSV file. It consists of a tree of element dictionaries (see below) that describes how the XML file is structured. **Note:** The root element of the XML should not be included.
@@ -120,9 +120,9 @@ The namespace used for the attribute name.
 
         {
           "tag": "value",
-          "multiple": True,
-          "row": True,
-          "text": True,
+          "multiple": true,
+          "row": true,
+          "text": true,
           "attributes": [
             {
               "attribute": "id",
