@@ -51,6 +51,20 @@ tree = ET.fromstring(data)
 # initialize the row counter
 rows = 0
 
+# define function that constructs a tag name of an element
+def getElementTag(_tag, _namespace):
+
+    # if there is no namespace defined
+    if _namespace is None:
+        return _tag
+    # else if there is no list of namespaces provided
+    elif namespaces is None:
+        return "{" + _namespace + "}" + _tag
+    # else if there is both a namespace and a list provided
+    else:
+        return "{" + namespaces[_namespace] + "}" + _tag
+
+
 # define the element reader
 def readElement(_structure, _tree, _vars):
 
@@ -73,27 +87,28 @@ def readElement(_structure, _tree, _vars):
     # check if element is extending other elements
     if _element['extends'] is not None:
 
+        # start with an empty list
         els = []
 
         # loop through each extended element
         for extend in _element['extends']:
 
-            # put the extended element in the list
-            els.append(_tree.find(extend if _element['namespace'] is None else "{" + namespaces[_element['namespace']] + "}" + extend))
+            # put the found extended element in the list
+            els.append(_tree.find(getElementTag(extend, _element['namespace'])))
 
         # print(els)
 
     # check if the element occurs multiple times
     elif _element['multiple'] is True:
 
-        # find all elements
-        els = _tree.findall(_element['tag'] if _element['namespace'] is None else "{" + namespaces[_element['namespace']] + "}" + _element['tag'])
+        # find all elements (which returns a list)
+        els = _tree.findall(getElementTag(_element['tag'], _element['namespace']))
 
     # if not multiple
     else:
 
-        # put first element in list
-        els = [_tree.find(_element['tag'] if _element['namespace'] is None else "{" + namespaces[_element['namespace']] + "}" + _element['tag'])]
+        # put first found element in a list
+        els = [_tree.find(getElementTag(_element['tag'], _element['namespace']))]
 
     # get the tree element() with correct namespace if provided
     for index, el in enumerate(els):
