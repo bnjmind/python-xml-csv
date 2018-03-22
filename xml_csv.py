@@ -11,10 +11,10 @@ import os
 
 # parse options given to script
 parser = argparse.ArgumentParser()
-parser.add_argument("data", help="The data source file to be converted (.xml or .gz)")
-parser.add_argument("structure", help="The structure file to be used (.json)")
-parser.add_argument("--namespaces", help="The namespaces to be used (.json)", metavar="")
-parser.add_argument("--output", help="The output file to be generated, defaults to source file name and location", metavar="")
+parser.add_argument("-d", "--data", help="The data source file to be converted (.xml or .gz)", metavar="", default="data.xml")
+parser.add_argument("-s", "--structure", help="The structure file to be used (.json)", metavar="", default="structure.json")
+parser.add_argument("-ns", "--namespaces", help="The namespaces to be used (.json)", metavar="")
+parser.add_argument("-o", "--output", help="The output file to be generated, defaults to source file name and location", metavar="")
 options = parser.parse_args()
 
 # save options to variables
