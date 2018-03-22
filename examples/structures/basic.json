@@ -1,0 +1,54 @@
+{
+  "tag": "measurements",
+  "multiple": true,
+  "children": [
+    {
+      "tag": "measurementtime",
+      "name": "time",
+      "text": true
+    },
+    {
+      "tag": "measurement",
+      "multiple": true,
+      "row": true,
+      "children": [
+        {
+         "tag": "location",
+         "attributes": [
+           {
+             "attribute": "id",
+             "name": "locID"
+           },
+           {
+             "attribute": "name"
+           }
+         ]
+        },
+        {
+         "tag": "values",
+         "children": [
+           {
+             "tag": "item",
+             "attributes": [
+               {
+                 "attribute": "index"
+               }
+             ],
+             "columns": 3,
+             "children": [
+               {
+                 "tag": "value",
+                 "text": true
+               },
+               {
+                 "tag": "unit",
+                 "text": true
+               }
+             ]
+           }
+         ]
+        }
+      ]
+    }
+  ]
+}
