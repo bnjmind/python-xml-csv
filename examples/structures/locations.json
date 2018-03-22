@@ -1,216 +1,241 @@
 {
-    "tag": "Body",
-    "namespace": "soapenv",
-    "children": [
+  "tag": "Body",
+  "namespace": "soapenv",
+  "children": [
+    {
+      "tag": "d2LogicalModel",
+      "namespace": "datex2",
+      "children": [
         {
-            "tag": "d2LogicalModel",
-            "namespace": "datex2",
-            "children": [
+          "tag": "payloadPublication",
+          "namespace": "datex2",
+          "children": [
+            {
+              "tag": "measurementSiteTable",
+              "namespace": "datex2",
+              "attributes": [
                 {
-                    "tag": "payloadPublication",
-                    "namespace": "datex2",
-                    "children": [
+                  "attribute": "id",
+                  "name": "locTableID"
+                },
+                {
+                  "attribute": "version",
+                  "name": "locTableVersion"
+                }
+              ],
+              "children": [
+                {
+                  "tag": "measurementSiteRecord",
+                  "namespace": "datex2",
+                  "attributes": [
+                    {
+                      "attribute": "id",
+                      "name": "locID"
+                    },
+                    {
+                      "attribute": "version",
+                      "name": "locVersion"
+                    }
+                  ],
+                  "multiple": true,
+                  "children": [
+                    {
+                      "tag": "computationMethod",
+                      "name": "mCompMethod",
+                      "namespace": "datex2",
+                      "text": true
+                    },
+                    {
+                      "tag": "measurementEquipmentTypeUsed",
+                      "namespace": "datex2",
+                      "children": [
                         {
-                            "tag": "measurementSiteTable",
-                            "namespace": "datex2",
-                            "attributes": [
+                          "tag": "values",
+                          "namespace": "datex2",
+                          "children": [
+                            {
+                              "tag": "value",
+                              "name": "mEquipment",
+                              "namespace": "datex2",
+                              "text": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "measurementSiteName",
+                      "namespace": "datex2",
+                      "children": [
+                        {
+                          "tag": "values",
+                          "namespace": "datex2",
+                          "children": [
+                            {
+                              "tag": "value",
+                              "name": "locName",
+                              "namespace": "datex2",
+                              "text": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "measurementSiteNumberOfLanes",
+                      "name": "locNumLanes",
+                      "namespace": "datex2",
+                      "text": true
+                    },
+                    {
+                      "tag": "measurementSide",
+                      "name": "locSide",
+                      "namespace": "datex2",
+                      "text": true
+                    },
+                    {
+                      "tag": "measurementSiteLocation",
+                      "namespace": "datex2",
+                      "attributes": [
+                        {
+                          "attribute": "type",
+                          "name": "locType",
+                          "namespace": "xsi"
+                        }
+                      ],
+                      "children": [
+                        {
+                          "tag": "locationForDisplay",
+                          "namespace": "datex2",
+                          "children": [
+                            {
+                              "tag": "latitude",
+                              "name": "locLat",
+                              "namespace": "datex2",
+                              "text": true
+                            },
+                            {
+                              "tag": "longitude",
+                              "name": "locLong",
+                              "namespace": "datex2",
+                              "text": true
+                            }
+                          ]
+                        },
+                        {
+                          "tag": "locationContainedInItinerary",
+                          "namespace": "datex2",
+                          "children": [
+                            {
+                              "tag": "location",
+                              "namespace": "datex2",
+                              "children": [
                                 {
-                                    "attribute": "id",
-                                    "name": "locTableID"
+                                  "tag": "locationForDisplay",
+                                  "namespace": "datex2",
+                                  "children": [
+                                    {
+                                      "tag": "latitude",
+                                      "name": "locLat",
+                                      "namespace": "datex2",
+                                      "text": true
+                                    },
+                                    {
+                                      "tag": "longitude",
+                                      "name": "locLong",
+                                      "namespace": "datex2",
+                                      "text": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "measurementSpecificCharacteristics",
+                      "namespace": "datex2",
+                      "attributes": [
+                        {
+                          "attribute": "index",
+                          "name": "locIndex"
+                        }
+                      ],
+                      "row": true,
+                      "multiple": true,
+                      "children": [
+                        {
+                          "tag": "measurementSpecificCharacteristics",
+                          "namespace": "datex2",
+                          "children": [
+                            {
+                              "tag": "accuracy",
+                              "name": "mAccuracy",
+                              "namespace": "datex2",
+                              "text": true
+                            },
+                            {
+                              "tag": "period",
+                              "name": "mPeriod",
+                              "namespace": "datex2",
+                              "text": true
+                            },
+                            {
+                              "tag": "specificLane",
+                              "name": "mLane",
+                              "namespace": "datex2",
+                              "text": true
+                            },
+                            {
+                              "tag": "specificMeasurementValueType",
+                              "name": "mType",
+                              "namespace": "datex2",
+                              "text": true
+                            },
+                            {
+                              "tag": "specificVehicleCharacteristics",
+                              "namespace": "datex2",
+                              "children": [
+                                {
+                                  "tag": "vehicleType",
+                                  "name": "mVehicleCat",
+                                  "namespace": "datex2",
+                                  "text": true
                                 },
                                 {
-                                    "attribute": "version",
-                                    "name": "locTableVersion"
+                                  "tag": "lengthCharacteristic",
+                                  "namespace": "datex2",
+                                  "columns": 2,
+                                  "children": [
+                                    {
+                                      "tag": "comparisonOperator",
+                                      "name": "mVehicleLengthOperator",
+                                      "namespace": "datex2",
+                                      "text": true
+                                    },
+                                    {
+                                      "tag": "vehicleLength",
+                                      "name": "mVehicleLength",
+                                      "namespace": "datex2",
+                                      "text": true
+                                    }
+                                  ]
                                 }
-                            ],
-                            "children": [
-                                {
-                                    "tag": "measurementSiteRecord",
-                                    "namespace": "datex2",
-                                    "attributes": [
-                                        {
-                                            "attribute": "id",
-                                            "name": "locID"
-                                        },
-                                        {
-                                            "attribute": "version",
-                                            "name": "locVersion"
-                                        }
-                                    ],
-                                    "multiple": true,
-                                    "children": [
-                                        {
-                                            "tag": "computationMethod",
-                                            "name": "mCompMethod",
-                                            "namespace": "datex2",
-                                            "text": true
-                                        },
-                                        {
-                                            "tag": "measurementEquipmentTypeUsed",
-                                            "namespace": "datex2",
-                                            "children": [
-                                                {
-                                                    "tag": "values",
-                                                    "namespace": "datex2",
-                                                    "children": [
-                                                        {
-                                                            "tag": "value",
-                                                            "name": "mEquipment",
-                                                            "namespace": "datex2",
-                                                            "text": true
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "tag": "measurementSiteName",
-                                            "namespace": "datex2",
-                                            "children": [
-                                                {
-                                                    "tag": "values",
-                                                    "namespace": "datex2",
-                                                    "children": [
-                                                        {
-                                                            "tag": "value",
-                                                            "name": "locName",
-                                                            "namespace": "datex2",
-                                                            "text": true
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "tag": "measurementSiteNumberOfLanes",
-                                            "name": "locNumLanes",
-                                            "namespace": "datex2",
-                                            "text": true
-                                        },
-                                        {
-                                            "tag": "measurementSide",
-                                            "name": "locSide",
-                                            "namespace": "datex2",
-                                            "text": true
-                                        },
-                                        {
-                                            "tag": "measurementSiteLocation",
-                                            "namespace": "datex2",
-                                            "attributes": [
-                                                {
-                                                    "attribute": "type",
-                                                    "name": "locType",
-                                                    "namespace": "xsi"
-                                                }
-                                            ],
-                                            "children": [
-                                                {
-                                                    "tag": "locationForDisplay",
-                                                    "namespace": "datex2",
-                                                    "children": [
-                                                        {
-                                                            "tag": "latitude",
-                                                            "name": "locLat",
-                                                            "namespace": "datex2",
-                                                            "text": true
-                                                        },
-                                                        {
-                                                            "tag": "longitude",
-                                                            "name": "locLong",
-                                                            "namespace": "datex2",
-                                                            "text": true
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "tag": "locationContainedInItinerary",
-                                                    "namespace": "datex2",
-                                                    "children": [
-                                                        {
-                                                            "tag": "location",
-                                                            "namespace": "datex2",
-                                                            "children": [
-                                                                {
-                                                                    "tag": "locationForDisplay",
-                                                                    "namespace": "datex2",
-                                                                    "children": [
-                                                                        {
-                                                                            "tag": "latitude",
-                                                                            "name": "locLat",
-                                                                            "namespace": "datex2",
-                                                                            "text": true
-                                                                        },
-                                                                        {
-                                                                            "tag": "longitude",
-                                                                            "name": "locLong",
-                                                                            "namespace": "datex2",
-                                                                            "text": true
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "tag": "measurementSpecificCharacteristics",
-                                            "namespace": "datex2",
-                                            "attributes": [
-                                                {
-                                                    "attribute": "index",
-                                                    "name": "locIndex"
-                                                }
-                                            ],
-                                            "row": true,
-                                            "multiple": true,
-                                            "children": [
-                                                {
-                                                    "tag": "measurementSpecificCharacteristics",
-                                                    "namespace": "datex2",
-                                                    "children": [
-                                                        {
-                                                            "tag": "accuracy",
-                                                            "name": "mAccuracy",
-                                                            "namespace": "datex2",
-                                                            "text": true
-                                                        },
-                                                        {
-                                                            "tag": "specificLane",
-                                                            "name": "mLane",
-                                                            "namespace": "datex2",
-                                                            "text": true
-                                                        },
-                                                        {
-                                                            "tag": "specificMeasurementValueType",
-                                                            "name": "mType",
-                                                            "namespace": "datex2",
-                                                            "text": true
-                                                        },
-                                                        {
-                                                            "tag": "specificVehicleCharacteristics",
-                                                            "namespace": "datex2",
-                                                            "children": [
-                                                                {
-                                                                    "tag": "vehicleType",
-                                                                    "name": "mVehicleCat",
-                                                                    "namespace": "datex2",
-                                                                    "text": true
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
+                              ]
+                            }
+                          ]
                         }
-                    ]
+                      ]
+                    }
+                  ]
                 }
-            ]
+              ]
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }

@@ -86,7 +86,7 @@ def getNamespace(_key, _namespace):
 
 
 # define the element reader
-def readElement(_structure, _tree, _vars):
+def readElement(_structure, _tree, _vars, _colsuffix):
 
     # set default properties of the element
     _element = {
@@ -98,6 +98,7 @@ def readElement(_structure, _tree, _vars):
         "text": False,
         "row": False,
         "multiple": False,
+        "columns": 1,
         "children": None
     }
 
@@ -118,8 +119,8 @@ def readElement(_structure, _tree, _vars):
 
         # print(els)
 
-    # check if the element occurs multiple times
-    elif _element['multiple'] is True:
+    # check if the element occurs multiple times in either rows or columns
+    elif _element['multiple'] is True or _element['columns'] > 1:
 
         # find all elements (which returns a list)
         els = _tree.findall(getNamespace(_element['tag'], _element['namespace']))
@@ -136,6 +137,13 @@ def readElement(_structure, _tree, _vars):
         # quit if no element is found
         if el is None:
             continue
+
+        # construct the suffix for the column name (if there's multiple columns with the same tag)
+        colsuffix = ""
+        if _colsuffix is not "":
+            colsuffix += _colsuffix
+        if _element['columns'] > 1:
+            colsuffix += "_" + str(index + 1)
 
         # check if there are any attributes on the element
         if _element['attributes'] is not None:
@@ -154,7 +162,7 @@ def readElement(_structure, _tree, _vars):
                 _attribute.update(attribute)
 
                 # get the column name
-                colname = getAttributeName(_attribute['name'], _attribute['attribute'], _element['name'], _element['tag'], _element['extends'])
+                colname = getAttributeName(_attribute['name'], _attribute['attribute'], _element['name'], _element['tag'], _element['extends']) + colsuffix
 
                 # get the attribute value
                 value = el.get(getNamespace(_attribute['attribute'], _attribute['namespace']))
@@ -166,7 +174,7 @@ def readElement(_structure, _tree, _vars):
         if _element['text'] is True:
 
             # get the column name
-            colname = _element['tag'] if _element['name'] is None else _element['name']
+            colname = (_element['tag'] if _element['name'] is None else _element['name']) + colsuffix
 
             # get the text value
             value = el.text
@@ -184,7 +192,7 @@ def readElement(_structure, _tree, _vars):
                 for child in _element['children']:
 
                     # read each element
-                    readElement(child, el, _vars)
+                    readElement(child, el, _vars, colsuffix)
 
         # element is indeed a row
         else:
@@ -199,7 +207,7 @@ def readElement(_structure, _tree, _vars):
                 for child in _element['children']:
 
                     # read each element
-                    readElement(child, el, row_vars)
+                    readElement(child, el, row_vars, colsuffix)
 
             # write a row in the csv file
             global csv_writer
@@ -213,7 +221,7 @@ def readElement(_structure, _tree, _vars):
 
 
 # define the column name reader
-def getColumnNames(_structure, _cols):
+def getColumnNames(_structure, _cols, _colsuffix):
 
     # set default properties of the element
     _element = {
@@ -225,60 +233,74 @@ def getColumnNames(_structure, _cols):
         "text": False,
         "row": False,
         "multiple": False,
+        "columns": 1,
         "children": None
     }
 
     # update the element with the passed structure
     _element.update(_structure)
 
-    # check if there are any attributes on the element
-    if _element['attributes'] is not None:
+    # start counter
+    i = 1
+    while i < _element['columns'] + 1:
 
-        # loop through them
-        for attribute in _element['attributes']:
+        # construct the suffix for the column name (if there's multiple columns with the same tag)
+        colsuffix = ""
+        if _colsuffix is not "":
+            colsuffix += _colsuffix
+        if _element['columns'] > 1:
+            colsuffix += "_" + str(i)
 
-            # set default properties of attribute
-            _attribute = {
-                "attribute": None,
-                "name": None,
-                "namespace": None
-            }
+        # check if there are any attributes on the element
+        if _element['attributes'] is not None:
 
-            # update the attribute
-            _attribute.update(attribute)
+            # loop through them
+            for attribute in _element['attributes']:
+
+                # set default properties of attribute
+                _attribute = {
+                    "attribute": None,
+                    "name": None,
+                    "namespace": None
+                }
+
+                # update the attribute
+                _attribute.update(attribute)
+
+                # get the column name
+                colname = getAttributeName(_attribute['name'], _attribute['attribute'], _element['name'], _element['tag'], _element['extends']) + colsuffix
+
+                # add attribute to columns if it doesn't exist yet
+                if colname not in _cols:
+                    _cols.append(colname)
+
+        # check if the text content should be saved
+        if _element['text'] is True:
 
             # get the column name
-            colname = getAttributeName(_attribute['name'], _attribute['attribute'], _element['name'], _element['tag'], _element['extends'])
+            colname = (_element['tag'] if _element['name'] is None else _element['name']) + colsuffix
 
-            # add attribute to columns if it doesn't exist yet
+            # add tag to columns
             if colname not in _cols:
                 _cols.append(colname)
 
-    # check if the text content should be saved
-    if _element['text'] is True:
+        # check if there are children to the element
+        if _element['children'] is not None:
 
-        # get the column name
-        colname = _element['tag'] if _element['name'] is None else _element['name']
+            # loop through them
+            for child in _element['children']:
 
-        # add tag to columns
-        if colname not in _cols:
-            _cols.append(colname)
+                # read each element
+                getColumnNames(child, _cols, colsuffix)
 
-    # check if there are children to the element
-    if _element['children'] is not None:
-
-        # loop through them
-        for child in _element['children']:
-
-            # read each element
-            getColumnNames(child, _cols)
-
+        # increase counter
+        i += 1
 
     # return the list of column names
     return _cols
 
 # get all the field names
-fieldnames = getColumnNames(structure, [])
+fieldnames = getColumnNames(structure, [], "")
 
 # if output folder doesn't exist yet, create it
 if not os.path.exists(os.path.dirname(input_outputfile)):
@@ -290,7 +312,7 @@ csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames, extrasaction='ignor
 csv_writer.writeheader()
 
 # start with reading the structure
-readElement(structure, tree, {})
+readElement(structure, tree, {}, "")
 
 # write the final number of rows written
 print("\rRows written: " + str(rows))
