@@ -3,7 +3,7 @@ Convert an XML file to a CSV using a predefined structure. It can be used to con
 
 ## 0. Usage
 ```
-python3 xml_csv.py data structure [--namespaces] [--output]
+python3 xml_csv.py --data --structure [--namespaces] [--output]
 ```
 Where 'data' is a relative path to an .xml or .gz file, 'structure' and '--namespaces' are relative paths to .json files, and '--output' is a relative path to a .csv file.
 
