@@ -7,7 +7,9 @@ python3 xml_csv.py --data --structure [--namespaces] [--output]
 ```
 **data**
 
-Path to .xml or .gzip file or folder with those files.
+1. Path to single .xml or .gz file
+2. Comma separated list of .xml or .gz files
+3. Path to folder with trailing '/' that contains .xml or .gz files
 
 **structure**
 
