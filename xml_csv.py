@@ -354,3 +354,4 @@ for i, input_datafiles_item in enumerate(input_datafiles):
 
 # print duration of script execution
 print("Finished in " + str(round(time.time() - timer, 2)) + " seconds\n")
+print("\a")
